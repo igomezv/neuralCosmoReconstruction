@@ -6,7 +6,7 @@ from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
 from matplotlib import pyplot as plt
 
-class AutoEncoder:
+class NeuralNet:
     def __init__(self, X, y, **kwargs):
         try:
             _, self.input_nodes = np.shape(X)
