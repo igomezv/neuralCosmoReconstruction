@@ -18,10 +18,10 @@ class NeuralNet:
             self.output_nodes = 1
         self.initializer = RandomNormal()
         split = kwargs.pop('split', 0.8)
-        self.first_nodes = kwargs.pop('first_nodes', 600)
-        self.hidden_nodes = kwargs.pop('hidden_nodes', 300)
-        self.last_nodes = kwargs.pop('last_nodes', 200)
-        self.coded_nodes = kwargs.pop('coded_nodes', 50)
+        self.hidden_nodes_1 = kwargs.pop('hidden_nodes_2', 600)
+        self.hidden_nodes_2 = kwargs.pop('hidden_nodes_2', 300)
+        self.hidden_nodes_3 = kwargs.pop('hidden_nodes_3', 300)
+        self.last_nodes = kwargs.pop('last_nodes', self.output_nodes)
         self.batch_size = kwargs.pop('batch_size', 64)
         self.epochs = kwargs.pop('epochs', 500)
         min_delta = kwargs.pop('min_delta', 0)
@@ -36,38 +36,35 @@ class NeuralNet:
         self.y_train, self.y_test = np.split(y, indx)
 
         input_x = Input(shape=(self.input_nodes,))
-        self.autoencoder = Model(input_x, self.autoencoder(input_x))
-        self.autoencoder.compile(loss='mean_squared_error', optimizer="adam")
-        self.autoencoder.summary()
+        self.model = Model(input_x, self.model(input_x))
+        self.model.compile(loss='mean_squared_error', optimizer="adam")
+        self.model.summary()
         self.callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
                                                            min_delta=min_delta,
                                                            patience=patience,
                                                            restore_best_weights=True)]
         self.trained_model = self.fit()
 
-    def autoencoder(self, input_x):
+    def model(self, input_x):
         # encoder
-        efirst = Dense(self.first_nodes, activation='relu', input_shape=(self.input_nodes,))(input_x)
-        ehidden = Dense(self.hidden_nodes, activation='relu')(efirst)
-        elast = Dense(self.last_nodes, activation='relu')(ehidden)
-        coded = Dense(self.coded_nodes, activation='relu')(elast)
-        # decoder
-        dfirst = Dense(self.last_nodes, activation='relu')(coded)
-        dhidden = Dense(self.hidden_nodes, activation='relu')(dfirst)
-        dlast = Dense(self.first_nodes, activation='relu')(dhidden)
-        decoded = Dense(self.output_nodes, activation='relu')(dlast)
-
-        return decoded
+        first = Dense(self.hidden_nodes_1, activation='relu', input_shape=(self.input_nodes,))(input_x)
+        hidden2 = Dense(self.hidden_nodes_2, activation='relu')(first)
+        hidden3 = Dense(self.hidden_nodes_3, activation='relu')(hidden2)
+        last = Dense(self.last_nodes, activation='relu')(hidden3)
+        return last
 
     def fit(self):
-        return self.autoencoder.fit(self.X_train, self.y_train,
+        return self.model.fit(self.X_train, self.y_train,
                                     batch_size=self.batch_size,
                                     epochs=self.epochs, verbose=1,
                                     validation_data=(self.X_test, self.y_test),
                                     callbacks=self.callbacks)
 
-    def predict(self, _X):
-        return self.autoencoder.predict(_X)
+    def predict(self, _X, model=None):
+        if model:
+            return model.predict(_X)
+        else:
+            return self.model.predict(_X)
 
     def plot(self, **kwargs):
         outputname = kwargs.pop('outputname', 'loss_AE')

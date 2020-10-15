@@ -66,7 +66,7 @@ class NeuralNet:
                                     epochs=self.epochs, verbose=1,
                                     validation_data=(self.X_test, self.y_test),
                                     callbacks=self.callbacks)
-
+    
     def predict(self, _X, model=None):
         if model:
             return model.predict(_X)

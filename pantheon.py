@@ -56,7 +56,9 @@ ALL = (Xinv.reshape(-1,1), zhel.reshape(-1,1), mb.reshape(-1,1), dmb.reshape(-1,
 ALL = np.concatenate(ALL, axis=1)
 neuralnetCOV = NeuralNet(ALL, syscov, first_nodes=800, hidden_nodes=500,
                              last_nodes=500, coded_nodes=100)
+
 neuralnetCOV.plot(outputname='lossCOV', show=True)
+
 ALLPRED = (r.reshape(-1,1), pred_zhel.reshape(-1,1),
            pred_mb.reshape(-1,1), pred_dmb.reshape(-1,1))
 ALLPRED = np.concatenate(ALLPRED, axis=1)
