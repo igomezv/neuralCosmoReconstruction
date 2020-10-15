@@ -17,8 +17,8 @@ class NeuralNet(object):
         y = y[randomize]
         ntrain = int(split * len(X))
         indx = [ntrain]
-        self.X_train, self.X_test = np.split(X, indx)
-        self.y_train, self.y_test = np.split(y, indx)
+        self.X_train, self.X_test = np.split(X, indx,  axis=0)
+        self.y_train, self.y_test = np.split(y, indx,  axis=0)
         self.model = self.model()
 
         self.callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',

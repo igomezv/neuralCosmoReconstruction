@@ -27,6 +27,6 @@ class FFNet(NeuralNet):
                 model.add(K.layers.Dense(self.topology[i], activation='relu'))
         optimizer = K.optimizers.Adam(learning_rate=self.lr)
         model.compile(optimizer=optimizer, loss='mean_squared_error')
-
+        model.summary()
         return model
 

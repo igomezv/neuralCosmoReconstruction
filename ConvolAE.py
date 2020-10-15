@@ -4,17 +4,15 @@ from tensorflow.keras import layers
 from tensorflow.keras import Input
 
 class ConvolAE(NeuralNet):
-    def __init__(self, **kwargs):
-        super(ConvolAE, self).__init__(self, **kwargs)
+    def __init__(self, X, **kwargs):
+        super(ConvolAE, self).__init__(self, X, y=X, **kwargs)
 
     def model(self):
         input_cov = Input(shape=(1048, 1048, 1))
-
         x = layers.Conv2D(10, (50, 50), activation='relu')(input_cov)
         # shape_1 = [1048 - (n-1)] x [1048 - (n-1)]
         x = layers.MaxPooling2D((4, 4))(x)
         # shape_2 = [(shape_1[0] -1)/2]
-
         x = layers.Flatten()(x)
         x = layers.Dense(1048)(x)
         # autoencoder.add(Dense(10))
