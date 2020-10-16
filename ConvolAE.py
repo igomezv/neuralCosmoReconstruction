@@ -18,11 +18,9 @@ class ConvolAE(NeuralNet):
 
     def model(self):
         input_cov = Input(shape=(1048, 1048, 1))
-        # x = layers.Conv2D(1, (50, 50), activation='relu', padding='same')(input_cov)
         # # shape_1 = [1048 - (n-1)] x [1048 - (n-1)]
-        # x = layers.MaxPooling2D((3, 3))(x)
-        # # shape_2 = [(shape_1[0] -1)/2]
         x = Conv2D(6, (3, 3), activation='relu', padding='same')(input_cov)
+        # # shape_2 = [(shape_1[0] -1)/2]
         x = MaxPooling2D((2, 2), padding='same')(x)
         x = Conv2D(4, (4, 4), activation='relu', padding='same')(x)
         encoded = MaxPooling2D((4, 4), padding='same')(x)

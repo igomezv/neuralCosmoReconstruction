@@ -8,13 +8,6 @@ import seaborn as sns
 import scipy as sp
 import os
 
-# Import os to set the environment variable CUDA_VISIBLE_DEVICES
-import os
-import tensorflow as tf
-import GPUtil
-from tensorflow.python.client import device_lib
-print(device_lib.list_local_devices())
-
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 file = 'data/pantheon_errors.txt'
@@ -35,14 +28,18 @@ def checking_matrix(matrix):
     return True
 
 
-def view_matrix(matrix, rootname="test", imshow=True, heatmap=True):
+def view_matrix(matrix, rootname="test", imshow=True, heatmap=True, show=True):
     if imshow:
         plt.imshow(matrix)
         plt.savefig("{}_imshow.png".format(rootname))
+        if show:
+            plt.show()
     if heatmap:
         sns.heatmap(pd.DataFrame(matrix), annot=False, fmt='g', xticklabels=False, yticklabels=False,
                     cmap='inferno')
         plt.savefig("{}_heatmap.png".format(rootname))
+        if show:
+            plt.show()
     return True
 
 
@@ -76,8 +73,11 @@ for i in range(numMatrix):
 # print("Dataset generated!")
 
 print(np.shape(pset))
-view_matrix(pset[0, :, :], 'first_pset', heatmap=False)
+# view_matrix(pset[0, :, :], 'first_pset', heatmap=False)
 
 # neural_net for mb
-autoencoder = ConvolAE(pset, pset, batch_size=32)
+autoencoder = ConvolAE(pset, pset, batch_size=32, epochs=200)
 autoencoder.plot(outputname='lossPantheon', show=True)
+
+decoded_imgs = autoencoder.predict()
+view_matrix(decoded_imgs[0, :, :, 0])
