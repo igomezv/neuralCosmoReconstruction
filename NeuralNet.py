@@ -4,13 +4,13 @@ from matplotlib import pyplot as plt
 
 
 class NeuralNet(object):
-    def __init__(self, X, y, **kwargs):
+    def __init__(self, X, y, epochs=200, split=100, batch_size=64, min_delta=0, patience=10):
 
-        split = kwargs.pop('split', 0.8)
-        self.batch_size = kwargs.pop('batch_size', 64)
-        self.epochs = kwargs.pop('epochs', 500)
-        min_delta = kwargs.pop('min_delta', 0)
-        patience = kwargs.pop('patience', 10)
+        split = split
+        self.batch_size = batch_size
+        self.epochs = epochs
+        min_delta = min_delta
+        patience = patience
 
         randomize = np.random.permutation(len(X))
         X = X[randomize]
@@ -27,7 +27,7 @@ class NeuralNet(object):
                                                            restore_best_weights=True)]
         self.trained_model = self.fit()
 
-    def model(self, **kwargs):
+    def model(self):
         err = "NeuralNet: You need to implement an model"
         raise NotImplementedError(err)
 
@@ -38,8 +38,11 @@ class NeuralNet(object):
                               validation_data=(self.X_test, self.y_test),
                               callbacks=self.callbacks)
 
-    def predict(self, _X):
-        return self.model.predict(_X)
+    def predict(self, new_vals=None):
+        if new_vals is None:
+            return self.model.predict(self.y_test)
+        else:
+            return self.model.predict(new_vals)
 
     def plot(self, **kwargs):
         plt.clf()

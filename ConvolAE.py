@@ -4,14 +4,17 @@ from tensorflow.keras.layers import Conv2D, Dense, UpSampling2D, MaxPooling2D
 from tensorflow.keras import Input
 
 class ConvolAE(NeuralNet):
-    def __init__(self, X, y, **kwargs):
-        split = kwargs.pop('split', 0.8)
-        self.batch_size = kwargs.pop('batch_size', 64)
-        self.epochs = kwargs.pop('epochs', 500)
-        min_delta = kwargs.pop('min_delta', 0)
-        patience = kwargs.pop('patience', 10)
-        self.lr = kwargs.pop('lr', 0.0001)
-        super(ConvolAE, self).__init__(X, y, **kwargs)
+    def __init__(self, X, y, epochs=100, split=0.8, batch_size=64, min_delta=0,
+                 patience=10, lr=0.0001):
+        split = split
+        self.batch_size = batch_size
+        self.epochs = epochs
+        min_delta = min_delta
+        patience = patience
+        self.lr = lr
+        super(ConvolAE, self).__init__(X, y, epochs=epochs, split=split,
+                                       batch_size=batch_size, min_delta=min_delta,
+                                       patience=patience)
 
     def model(self):
         input_cov = Input(shape=(1048, 1048, 1))
@@ -34,7 +37,8 @@ class ConvolAE(NeuralNet):
         # encoded = layers.Dense(1048)(x)
 
         autoencoder = tf.keras.Model(input_cov, decoded)
-        autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+        optimizer = tf.keras.optimizers.Adam(lr=self.lr)
+        autoencoder.compile(optimizer=optimizer, loss='binary_crossentropy')
         autoencoder.summary()
 
         return autoencoder

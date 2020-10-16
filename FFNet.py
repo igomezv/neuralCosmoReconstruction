@@ -3,15 +3,18 @@ from NeuralNet import NeuralNet
 
 
 class FFNet(NeuralNet):
-    def __init__(self, X, y, topology, **kwargs):
+    def __init__(self, X, y, topology, split=0.8, batch_size=64, epochs=200,
+                 min_delta=0, patience=10, lr=0.0001):
         self.topology = topology
-        split = kwargs.pop('split', 0.8)
-        self.batch_size = kwargs.pop('batch_size', 64)
-        self.epochs = kwargs.pop('epochs', 500)
-        min_delta = kwargs.pop('min_delta', 0)
-        patience = kwargs.pop('patience', 10)
-        self.lr = kwargs.pop('lr', 0.0001)
-        super(FFNet, self).__init__(X, y, **kwargs)
+        split = split
+        self.batch_size = batch_size
+        self.epochs = epochs
+        min_delta = min_delta
+        patience = patience
+        self.lr = lr
+        super(FFNet, self).__init__(X, y, epochs=epochs, split=split,
+                                    batch_size=batch_size, min_delta=min_delta,
+                                    patience=patience)
 
     def model(self):
         # encoder
