@@ -10,7 +10,7 @@ class FFNet(NeuralNet):
         self.epochs = kwargs.pop('epochs', 500)
         min_delta = kwargs.pop('min_delta', 0)
         patience = kwargs.pop('patience', 10)
-        self.lr =  kwargs.pop('lr', 0.0001)
+        self.lr = kwargs.pop('lr', 0.0001)
         super(FFNet, self).__init__(X, y, **kwargs)
 
     def model(self):

@@ -1,4 +1,3 @@
-import tensorflow.keras
 import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
@@ -33,10 +32,10 @@ class NeuralNet(object):
 
     def fit(self):
         return self.model.fit(self.X_train, self.y_train,
-                            batch_size=self.batch_size,
-                            epochs=self.epochs, verbose=1,
-                            validation_data=(self.X_test, self.y_test),
-                            callbacks=self.callbacks)
+                              batch_size=self.batch_size,
+                              epochs=self.epochs, verbose=1,
+                              validation_data=(self.X_test, self.y_test),
+                              callbacks=self.callbacks)
 
     def predict(self, _X):
         return self.model.predict(_X)
