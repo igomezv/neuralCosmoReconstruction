@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 class NeuralNet(object):
     def __init__(self, X, y, **kwargs):
 
@@ -41,6 +42,7 @@ class NeuralNet(object):
         return self.model.predict(_X)
 
     def plot(self, **kwargs):
+        plt.clf()
         outputname = kwargs.pop('outputname', 'loss')
         train_color = kwargs.pop('train_color', 'r')
         val_color = kwargs.pop('val_color', 'g')
