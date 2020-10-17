@@ -35,7 +35,8 @@ def view_matrix(matrix, rootname="test", imshow=True, heatmap=True, show=True):
         if show:
             plt.show()
     if heatmap:
-        sns.heatmap(pd.DataFrame(matrix), annot=False, fmt='g', xticklabels=False, yticklabels=False,
+        sns.heatmap(pd.DataFrame(matrix), annot=False, fmt='g', xticklabels=False,
+                    yticklabels=False,
                     cmap='inferno')
         plt.savefig("{}_heatmap.png".format(rootname))
         if show:
@@ -45,7 +46,7 @@ def view_matrix(matrix, rootname="test", imshow=True, heatmap=True, show=True):
 
 # print("Covariance matrix")
 # checking_matrix(syscov)
-# view_matrix(syscov, rootname='original', heatmap=False)
+# view_matrix(syscov, rootname='original', imshow=False)
 
 # For descomposition of symmetrical matrix syscov = P D P^T,
 # where D is a diagonal matrix with the eigenvalues of syscov
@@ -54,7 +55,7 @@ def view_matrix(matrix, rootname="test", imshow=True, heatmap=True, show=True):
 D, P = sp.linalg.eigh(syscov)
 # print("Eigenvector matrix:")
 # checking_matrix(P)
-# view_matrix(P, rootname='eigenvects', heatmap=False)
+# view_matrix(P, rootname='eigenvects', imshow=False)
 
 # Generate a data set with matrices
 # of eigenvectors from the original plus gaussian noise
@@ -73,11 +74,11 @@ for i in range(numMatrix):
 # print("Dataset generated!")
 
 print(np.shape(pset))
-# view_matrix(pset[0, :, :], 'first_pset', heatmap=False)
+# view_matrix(pset[0, :, :], 'first_pset', imshow=False)
 
 # neural_net for mb
-autoencoder = ConvolAE(pset, pset, batch_size=32, epochs=200)
-autoencoder.plot(outputname='lossPantheon', show=True)
+autoencoder = ConvolAE(pset, pset, batch_size=64, epochs=50)
+autoencoder.plot(outputname='lossPantheon', imshow=False, show=True)
 
 decoded_imgs = autoencoder.predict()
-view_matrix(decoded_imgs[0, :, :, 0])
+view_matrix(decoded_imgs[0, :, :, 0], rootname='prediction_test', imshow=False)
