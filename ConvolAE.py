@@ -1,42 +1,88 @@
 from NeuralNet import NeuralNet
 import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, Dense, UpSampling2D, MaxPooling2D
+from tensorflow.keras.layers import Conv2D, Dense, UpSampling2D, \
+    MaxPooling2D, Flatten, Reshape, Conv2DTranspose, Dropout, ZeroPadding2D
 from tensorflow.keras import Input
 
 class ConvolAE(NeuralNet):
     def __init__(self, X, y, epochs=100, split=0.8, batch_size=64, min_delta=0,
-                 patience=10, lr=0.0001):
+                 patience=10, lr=0.0001, size=1048):
         split = split
         self.batch_size = batch_size
         self.epochs = epochs
         min_delta = min_delta
         patience = patience
         self.lr = lr
+        self.latent_dim = size
+        self.input_size = size
+        self.e_model = self.encoder()
+        self.d_model = self.decoder()
         super(ConvolAE, self).__init__(X, y, epochs=epochs, split=split,
                                        batch_size=batch_size, min_delta=min_delta,
                                        patience=patience)
 
     def model(self):
-        input_cov = Input(shape=(1048, 1048, 1))
-        # # shape_1 = [1048 - (n-1)] x [1048 - (n-1)]
-        x = Conv2D(6, (3, 3), activation='relu', padding='same')(input_cov)
-        # # shape_2 = [(shape_1[0] -1)/2]
-        x = MaxPooling2D((2, 2), padding='same')(x)
-        x = Conv2D(4, (4, 4), activation='relu', padding='same')(x)
-        encoded = MaxPooling2D((4, 4), padding='same')(x)
+        input_cov = Input(shape=(self.input_size, self.input_size, 1))
+        model = tf.keras.Model(input_cov, self.d_model(self.e_model(input_cov)),
+                               name='autoencoder')
+        optimizer = tf.keras.optimizers.Adam(lr=0.00008, beta_1=0.9)
+        model.compile(optimizer=optimizer, loss='mean_squared_error', metrics=['mae'])
+        # autoencoder = tf.keras.Model(input_cov, decoded)
+        # optimizer = tf.keras.optimizers.Adam(lr=self.lr)
+        # autoencoder.compile(optimizer=optimizer, loss='binary_crossentropy')
+        # model.summary()
 
-        x = Conv2D(4, (4, 4), activation='relu', padding='same')(encoded)
-        x = UpSampling2D((4, 4))(x)
-        x = Conv2D(6, (3, 3), activation='relu', padding='same')(x)
-        x = UpSampling2D((2, 2))(x)
-        decoded = Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x)
+        return model
 
-        # x = layers.Flatten()(x)
-        # encoded = layers.Dense(1048)(x)
+    def encoder(self):
+        model = tf.keras.Sequential()
+        model.add(Conv2D(5, (3, 3), activation='relu', padding='same', input_shape=(self.input_size, self.input_size, 1)))
+        # out = 1048x1048x5
+        model.add(MaxPooling2D((2, 2), padding='same'))
+        # out = 524x524x5
+        model.add(Conv2D(5, (3, 3), activation='relu', padding='same'))
+        # out = 524 x 524 x 5
+        model.add(MaxPooling2D((2, 2), padding='same'))
+        #out = 262 x 262 x 5
+        model.add(Conv2D(2, (3, 3), activation='relu', padding='same'))
+        # out = 262 x 262 x 2
+        model.add(MaxPooling2D((2, 2), padding='same'))
+        # out = 131 x 131 x 2
+        model.add(Conv2D(1, (3, 3), activation='relu', padding='same'))
+        # out = 131 x 131 x 1
+        model.add(Flatten()) # 131x131x1
+        # latent dimension
+        model.add(Dense(self.latent_dim))
+        model.summary()
+        # tf.keras.utils.plot_model(model, show_shapes=True)
 
-        autoencoder = tf.keras.Model(input_cov, decoded)
-        optimizer = tf.keras.optimizers.Adam(lr=self.lr)
-        autoencoder.compile(optimizer=optimizer, loss='binary_crossentropy')
-        autoencoder.summary()
+        return model
 
-        return autoencoder
+    def decoder(self):
+        model = tf.keras.Sequential()
+        model.add(Dense(131 * 131, input_shape=(self.latent_dim,)))
+        model.add(Reshape((131, 131, 1)))
+        # output = 131 x 131 x 1
+        model.add(Conv2D(2, (2, 2), activation='relu', padding='same'))
+        # output = 131 x 131 x 2
+        model.add(UpSampling2D((2, 2)))
+        # output = 262 x 262 x 2
+        model.add(Conv2D(2, (2, 2), activation='relu', padding='same'))
+        # output = 262 x 262 x 2
+        model.add(UpSampling2D((2, 2)))
+        # output = 524 x 524 x 2
+        model.add(Conv2D(2, (2, 2), activation='relu', padding='same'))
+        # output = 524 x 524 x 2
+        model.add(UpSampling2D((2, 2)))
+        # output = 1048 x 1048 x 2
+        model.add(Conv2D(3, (2, 2), activation='relu', padding='same'))
+        # output = 1048 x 1048 x 2
+        # model.add(ZeroPadding2D(padding=(1, 1)))  # needed to match the output shape
+        model.add(Dropout(0.5))
+        # output = 1048 x 1048 x 2
+        model.add(Conv2D(1, (2, 2), padding='same'))
+        # output = 1048 x 1048 x 1
+        # model.summary()
+        # tf.keras.utils.plot_model(model, show_shapes=True)
+
+        return model
