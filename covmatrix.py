@@ -8,6 +8,7 @@ import seaborn as sns
 import scipy as sp
 import os
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 file = 'data/pantheon_errors.txt'
@@ -24,7 +25,7 @@ def checking_matrix(matrix):
             if syscov[i, j] != syscov[j, i]:
                 c_nosym += 1
                 syscov[j, i] = syscov[i, j]
-    # print("Complex values: {} | No symmetrical: {}".format(c_cplx, c_nosym))
+    print("Complex values: {} | No symmetrical: {}".format(c_cplx, c_nosym))
     return True
 
 
@@ -60,25 +61,35 @@ D, P = sp.linalg.eigh(syscov)
 # Generate a data set with matrices
 # of eigenvectors from the original plus gaussian noise
 
-numMatrix = 10
+numMatrix = 100
 noise_factor = 1e-5
 # scaler = StandardScaler()
 # feature_range=(-1,1)
-# scaler.fit(ortM)
+# scaler.fit(P)
 pset = np.zeros((numMatrix, 1048, 1048))
 
 # print("Generating dataset...")
 for i in range(numMatrix):
     pset[i] = P + noise_factor * np.random.normal(loc=0.0, scale=0.01, size=P.shape)
-# eigenvecdata[i] = scaler.transform(eigenvecdata[i])
+    # pset[i] = scaler.transform(P) + noise_factor * np.random.normal(loc=0.0, scale=0.01, size=P.shape)
 # print("Dataset generated!")
 
 print(np.shape(pset))
 # view_matrix(pset[0, :, :], 'first_pset', imshow=False)
+# try to recover original cov
+recover_cov = np.matmul(pset[0, :, : ], D)
+recover_cov = np.matmul(recover_cov, np.transpose(pset[0, :, :]))
+view_matrix(pset[0, :, :], 'recover_cov_first_pset', imshow=False)
 
 # neural_net for mb
-autoencoder = ConvolAE(pset, pset, batch_size=64, epochs=50)
+autoencoder = ConvolAE(pset, pset, batch_size=8, epochs=100)
 autoencoder.plot(outputname='lossPantheon', imshow=False, show=True)
 
 decoded_imgs = autoencoder.predict()
 view_matrix(decoded_imgs[0, :, :, 0], rootname='prediction_test', imshow=False)
+
+new_matrix = np.matmul(P, decoded_imgs[0, :, :, 0])
+new_matrix = np.matmul(new_matrix, np.transpose(P))
+view_matrix(new_matrix, rootname='new_cov', imshow=False)
+
+# view_matrix(scaler.inverse_transform(new_matrix), rootname='new_cov_inverse_scaler', imshow=False)

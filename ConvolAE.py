@@ -35,7 +35,7 @@ class ConvolAE(NeuralNet):
 
     def encoder(self):
         model = tf.keras.Sequential()
-        model.add(Conv2D(20, (3, 3), activation='relu', padding='same', input_shape=(self.input_size, self.input_size, 1)))
+        model.add(Conv2D(10, (3, 3), activation='relu', padding='same', input_shape=(self.input_size, self.input_size, 1)))
         # out = 1048x1048x5
         model.add(MaxPooling2D((2, 2), padding='same'))
         # out = 524x524x5
@@ -43,7 +43,7 @@ class ConvolAE(NeuralNet):
         # out = 524 x 524 x 5
         model.add(MaxPooling2D((2, 2), padding='same'))
         # out = 262 x 262 x 5
-        model.add(Conv2D(10, (3, 3), activation='relu', padding='same'))
+        model.add(Conv2D(20, (3, 3), activation='relu', padding='same'))
         # out = 262 x 262 x 2
         model.add(MaxPooling2D((2, 2), padding='same'))
         # out = 131 x 131 x 2
@@ -66,7 +66,7 @@ class ConvolAE(NeuralNet):
         # output = 131 x 131 x 2
         model.add(UpSampling2D((2, 2)))
         # output = 262 x 262 x 2
-        model.add(Conv2D(10, (2, 2), activation='relu', padding='same'))
+        model.add(Conv2D(20, (2, 2), activation='relu', padding='same'))
         # output = 262 x 262 x 2
         model.add(UpSampling2D((2, 2)))
         # output = 524 x 524 x 2
@@ -74,11 +74,11 @@ class ConvolAE(NeuralNet):
         # output = 524 x 524 x 2
         model.add(UpSampling2D((2, 2)))
         # output = 1048 x 1048 x 2
-        model.add(Conv2D(20, (2, 2), activation='linear', padding='same'))
+        model.add(Conv2D(10, (2, 2), activation='relu', padding='same'))
         # output = 1048 x 1048 x 2
         model.add(Dropout(0.5))
         # output = 1048 x 1048 x 2
-        model.add(Conv2D(1, (2, 2), padding='same'))
+        model.add(Conv2D(1, (2, 2), activation='linear', padding='same'))
         # output = 1048 x 1048 x 1
         # model.summary()
         # tf.keras.utils.plot_model(model, show_shapes=True)
