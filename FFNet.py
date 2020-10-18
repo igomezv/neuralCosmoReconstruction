@@ -4,7 +4,7 @@ from NeuralNet import NeuralNet
 
 class FFNet(NeuralNet):
     def __init__(self, X, y, topology, split=0.8, batch_size=64, epochs=200,
-                 min_delta=0, patience=10, lr=0.0001):
+                 min_delta=0, patience=10, lr=0.0001, saveModel=False, models_dir='models'):
         self.topology = topology
         split = split
         self.batch_size = batch_size
@@ -14,7 +14,8 @@ class FFNet(NeuralNet):
         self.lr = lr
         super(FFNet, self).__init__(X, y, epochs=epochs, split=split,
                                     batch_size=batch_size, min_delta=min_delta,
-                                    patience=patience)
+                                    patience=patience, saveModel=saveModel,
+                                    models_dir=models_dir)
 
     def model(self):
         # encoder

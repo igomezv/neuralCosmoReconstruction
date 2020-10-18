@@ -4,13 +4,17 @@ from matplotlib import pyplot as plt
 
 
 class NeuralNet(object):
-    def __init__(self, X, y, epochs=200, split=100, batch_size=64, min_delta=0, patience=10):
+    def __init__(self, X, y, epochs=200, split=100, batch_size=64, min_delta=0, patience=10,
+                 saveModel=False, models_dir='models'):
 
         split = split
         self.batch_size = batch_size
         self.epochs = epochs
         min_delta = min_delta
         patience = patience
+
+        self.saveModel = saveModel
+        models_dir = models_dir
 
         randomize = np.random.permutation(len(X))
         X = X[randomize]
@@ -25,6 +29,12 @@ class NeuralNet(object):
                                                            min_delta=min_delta,
                                                            patience=patience,
                                                            restore_best_weights=True)]
+
+        if self.saveModel:
+            self.callbacks.append(tf.keras.callbacks.ModelCheckpoint(
+                                  os.path.join(models_dir, 'epoch_{epoch:02d}_mse_{val_mse:.4f}.h5'),
+                                  monitor='val_loss', save_weights_only=False, save_best_only=False))
+
         self.trained_model = self.fit()
 
     def model(self):
