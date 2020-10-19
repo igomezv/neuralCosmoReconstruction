@@ -1,10 +1,11 @@
-import tensorflow as tf
+import os
 import numpy as np
 from matplotlib import pyplot as plt
+import tensorflow as tf
 
 
 class NeuralNet(object):
-    def __init__(self, X, y, epochs=200, split=100, batch_size=64, min_delta=0, patience=10,
+    def __init__(self, X, y, epochs=200, split=0.8, batch_size=64, min_delta=0, patience=10,
                  saveModel=False, models_dir='models'):
 
         split = split
@@ -32,7 +33,7 @@ class NeuralNet(object):
 
         if self.saveModel:
             self.callbacks.append(tf.keras.callbacks.ModelCheckpoint(
-                                  os.path.join(models_dir, 'epoch_{epoch:02d}_mse_{val_mse:.4f}.h5'),
+                                  os.path.join(models_dir, 'epoch_{epoch:02d}_mse_{val_loss:.4f}.h5'),
                                   monitor='val_loss', save_weights_only=False, save_best_only=False))
 
         self.trained_model = self.fit()
