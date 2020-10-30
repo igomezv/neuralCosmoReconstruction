@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="968757da-003c-423d-bf85-a240aaca2536" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/GAN.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/covmatrixmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConvolAE.py" beforeDir="false" afterPath="$PROJECT_DIR$/ConvolAE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NeuralNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/NeuralNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/covmatrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/covmatrix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/binned_JLA_ANN.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/binned_JLA_ANN.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pantheon.py" beforeDir="false" afterPath="$PROJECT_DIR$/pantheon.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1hTZiR9koryh4jyhJDO0eErXAZN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../igomezv.github.io" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="968757da-003c-423d-bf85-a240aaca2536" name="Default Changelist" comment="" />
+      <created>1600037168562</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1600037168562</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="735" y="310" key="FileChooserDialogImpl" timestamp="1601495745480">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="735" y="310" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1601495745480" />
+    <state x="144" y="147" width="1622" height="810" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600148177685">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="144" y="147" width="1622" height="810" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1600148177685" />
+  </component>
+</project>
