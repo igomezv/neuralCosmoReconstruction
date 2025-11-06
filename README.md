@@ -1,6 +1,6 @@
 [<img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2104.00595-red.svg">](https://arxiv.org/abs/2104.00595)
 
-# Cosmological Reconstructions with Artificial Neural Networks (CRANN)
+# Cosmological Reconstructions with Artificial Neural Networks 
 
 **CRANN** is an open-source project designed to facilitate cosmological reconstructions using Artificial Neural Networks. This repository hosts the neural networks trained to generate synthetic cosmic chronometers, JLA Type Ia supernovae (distance modulus), and $f_{\sigma8}$ data, based on the findings and methodologies described in our paper:
 
